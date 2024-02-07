@@ -18,13 +18,15 @@ public class AccountControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    // 테스트는 나중에 작성한다.
     @DisplayName("회원 가입 화면이 보이는지 테스트")
     @Test
     void signUpForm() throws Exception {
         mockMvc.perform(get("/sign-up"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(view().name("account/sign-up"));
+                .andExpect(view().name("account/sign-up"))
+                .andExpect(model().attributeExists("signUpForm")); // 있는지 체크
     }
 
 }
