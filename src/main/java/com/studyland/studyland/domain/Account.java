@@ -3,6 +3,7 @@ package com.studyland.studyland.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -53,4 +54,9 @@ public class Account {
     private boolean studyUpdateByEmail;
 
     private boolean studyUpdateByWeb;
+
+    // email 인증 랜덤 토큰 생성
+    public void generateEmailCheckToken() {
+        this.emailCheckToken = UUID.randomUUID().toString();
+    }
 }
