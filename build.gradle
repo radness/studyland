@@ -36,6 +36,9 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation 'javax.mail:javax.mail-api:1.6.2'
+	/* spring boot 2.3 version 이상 부터는 spring-boot-starter-web 의존성 내부에 있던 validation이 삭제되었다.
+	 sb 2.3 이상이라면 validation 의존성을 별도로 추가해 주어야 함. */
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 }
 
 tasks.named('test') {
