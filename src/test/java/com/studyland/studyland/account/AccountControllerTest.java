@@ -43,12 +43,12 @@ public class AccountControllerTest {
                 .andExpect(model().attributeExists("signUpForm")); // 있는지 체크
     }
 
-    @DisplayName("회원 가입 처리 - 입력값 오류")
+    @DisplayName("회원 가입 처리 - 입력값 정상")
     @Test
     void signUpSubmit_with_correct_input() throws Exception {
         // CSRF 토큰 이슈
         mockMvc.perform(post("/sign-up")
-                .param("nickname", "yeonghoon")
+                .param("nickname", "radness")
                 .param("email", "yhs5128@gmail.com")
                 .param("password", "12345678")
                         .with(csrf()))
@@ -58,8 +58,8 @@ public class AccountControllerTest {
         Account account = accountRepository.findByEmail("yhs5128@gmail.com");
         assertNotNull(account); // null이 아닌지 확인
         assertNotEquals(account.getPassword(), "12345678");
-        assertTrue(accountRepository.existsByEmail("yhs5128@gmail.com")); // 이메일지 존재하는지 확인
-
+        assertNotNull(account.getEmailCheckToken()); // 토큰이 null인지 확인
+//        assertTrue(accountRepository.existsByEmail("yhs5128@gmail.com")); // 이메일지 존재하는지 확인
         // 랜덤한 인스턴스 타입을 가지고 send를 호출했는지 확인
         // TODO SMTP로 gmail 메일 발송
         // 외부 연동은 Mocking

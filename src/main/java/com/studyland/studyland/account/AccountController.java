@@ -3,8 +3,6 @@ package com.studyland.studyland.account;
 import com.studyland.studyland.domain.Account;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -12,6 +10,9 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.time.LocalDateTime;
 
 @Controller
 @RequiredArgsConstructor
@@ -19,6 +20,7 @@ public class AccountController {
 
     private final SignUpFormValidator signUpFormValidator;
     private final AccountService accountService;
+    private final AccountRepository accountRepository;
 
     @InitBinder("signUpForm")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -42,9 +44,35 @@ public class AccountController {
 
         accountService.processNewAccount(signUpForm);
 
-        // TODO 회원 가입 처리
         return "redirect:/";
     }
 
+    @GetMapping("/check-email-token")
+    // model : 화면에 전달해야할 model
+    public String checkEmailToken(String token, String email, Model model) {
+        // email 해당하는 user 확인
+        // repository 도메인 계층으로 보는지 or layered 계층(c,s,r,dao)으로 보느냐에 따라서
+        // repository 를 controller 쓰는가
+        // 여기에서는 repository 를 domain 과 같은 level 로 본다.
+        Account account = accountRepository.findByEmail(email);
+        String view = "account/checked-email";
+
+        if (account == null) {
+            model.addAttribute("error", "wrong.email");
+            return view;
+        }
+        // email 이 있는 경우
+        if (!account.getEmailCheckToken().equals(token)) { // 토큰 비교
+            model.addAttribute("error", "wrong.token");
+            return view;
+        }
+
+        account.setEmailVerified(true);
+        account.setJoinedAt(LocalDateTime.now()); // 가입한 날짜
+        // view 에 전달해줘야하는 정보
+        model.addAttribute("numberOfUser", accountRepository.count());
+        model.addAttribute("nickname", account.getNickname());
+        return view;
+    }
 
 }
