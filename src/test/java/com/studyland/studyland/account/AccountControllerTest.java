@@ -1,5 +1,6 @@
 package com.studyland.studyland.account;
 
+import com.studyland.studyland.domain.Account;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -54,6 +55,9 @@ public class AccountControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));
 
+        Account account = accountRepository.findByEmail("yhs5128@gmail.com");
+        assertNotNull(account); // null이 아닌지 확인
+        assertNotEquals(account.getPassword(), "12345678");
         assertTrue(accountRepository.existsByEmail("yhs5128@gmail.com")); // 이메일지 존재하는지 확인
 
         // 랜덤한 인스턴스 타입을 가지고 send를 호출했는지 확인
