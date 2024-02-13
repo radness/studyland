@@ -18,8 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class AccountController {
 
     private final SignUpFormValidator signUpFormValidator;
-    private final AccountRepository accountRepository;
-    private final JavaMailSender javaMailSender;
+    private final AccountService accountService;
 
     @InitBinder("signUpForm")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -41,28 +40,11 @@ public class AccountController {
             return "account/sign-up"; // error가 존재하면 다시 form으로 간다.
         }
 
-        Account account = Account.builder()
-                .email(signUpForm.getEmail())
-                .nickname(signUpForm.getNickname())
-                .password(signUpForm.getPassword()) // TODO encoding 해야함.
-                .studyCreatedByWeb(true)
-                .studyEnrollmentResultByWeb(true)
-                .studyUpdateByWeb(true)
-                .build();
-
-        Account newAccount = accountRepository.save(account);
-        
-        // email 보내기
-        newAccount.generateEmailCheckToken(); // 토큰 생성
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setTo(newAccount.getEmail());
-        simpleMailMessage.setSubject("스터디랜드, 회원 가입 인증"); // 제목
-        // 본문, 만들어보낸 토큰값을 가져와서 매개변수로 전달.
-        simpleMailMessage.setText("/check-email-token?token=" + newAccount.getEmailCheckToken()
-                + "%email=" + newAccount.getEmail());
-        javaMailSender.send(simpleMailMessage);
+        accountService.processNewAccount(signUpForm);
 
         // TODO 회원 가입 처리
         return "redirect:/";
     }
+
+
 }
