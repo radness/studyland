@@ -51,7 +51,7 @@ public class AccountController {
     // model : 화면에 전달해야할 model
     public String checkEmailToken(String token, String email, Model model) {
         // email 해당하는 user 확인
-        // repository 도메인 계층으로 보는지 or layered 계층(c,s,r,dao)으로 보느냐에 따라서
+        // repository 도메인 계층으로 보는지 or layered 계층(c,s,r,dao)으로 보느냐에 따라서ㄹ
         // repository 를 controller 쓰는가
         // 여기에서는 repository 를 domain 과 같은 level 로 본다.
         Account account = accountRepository.findByEmail(email);
@@ -67,8 +67,11 @@ public class AccountController {
             return view;
         }
 
-        account.setEmailVerified(true);
-        account.setJoinedAt(LocalDateTime.now()); // 가입한 날짜
+        // 리팩토링
+        // account.setEmailVerified(true);
+        // account.setJoinedAt(LocalDateTime.now()); // 가입한 날짜
+        account.compltesSignUp();
+
         // view 에 전달해줘야하는 정보
         model.addAttribute("numberOfUser", accountRepository.count());
         model.addAttribute("nickname", account.getNickname());
