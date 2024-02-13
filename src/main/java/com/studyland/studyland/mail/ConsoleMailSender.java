@@ -1,4 +1,4 @@
-package com.studyland.studyland;
+package com.studyland.studyland.mail;
 
 import jakarta.mail.internet.MimeMessage;
 import lombok.extern.slf4j.Slf4j;
