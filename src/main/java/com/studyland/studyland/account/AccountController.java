@@ -42,7 +42,8 @@ public class AccountController {
             return "account/sign-up"; // error가 존재하면 다시 form으로 간다.
         }
 
-        accountService.processNewAccount(signUpForm);
+        Account account = accountService.processNewAccount(signUpForm);
+        accountService.login(account);
 
         return "redirect:/";
     }
@@ -62,16 +63,13 @@ public class AccountController {
             return view;
         }
         // email 이 있는 경우
-        if (!account.getEmailCheckToken().equals(token)) { // 토큰 비교
+        if (!account.isValidToken(token)) { // 리팩토링
             model.addAttribute("error", "wrong.token");
             return view;
         }
 
-        // 리팩토링
-        // account.setEmailVerified(true);
-        // account.setJoinedAt(LocalDateTime.now()); // 가입한 날짜
         account.compltesSignUp();
-
+        accountService.login(account);
         // view 에 전달해줘야하는 정보
         model.addAttribute("numberOfUser", accountRepository.count());
         model.addAttribute("nickname", account.getNickname());

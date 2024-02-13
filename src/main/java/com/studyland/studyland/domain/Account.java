@@ -63,6 +63,9 @@ public class Account {
     public void compltesSignUp() {
         this.emailVerified = true;
         this.joinedAt = LocalDateTime.now(); // 가입한 날짜
+    }
 
+    public boolean isValidToken(String token) {
+        return this.emailCheckToken.equals(token);
     }
 }
