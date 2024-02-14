@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated;
 import static org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -68,7 +69,7 @@ public class AccountControllerTest {
                 .andExpect(model().attributeExists("nickname"))
                 .andExpect(model().attributeExists("numberOfUser"))
                 .andExpect(view().name("account/checked-email"))
-//                .andExpect(authenticated().withUsername("radness"))
+                .andExpect(authenticated().withUsername("radness"))
         ;
     }
 
@@ -108,7 +109,7 @@ public class AccountControllerTest {
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"))
-//                .andExpect(authenticated().withUsername("radness"))
+                .andExpect(authenticated().withUsername("radness"))
         ;
 
         Account account = accountRepository.findByEmail("yhs5128@gmail.com");

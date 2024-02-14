@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.2.2'
+	id 'org.springframework.boot' version '2.7.18'
 	id 'io.spring.dependency-management' version '1.1.4'
 }
 
@@ -8,14 +8,14 @@ group = 'com.studyland'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '17'
+	sourceCompatibility = '11'
 }
 
 compileJava {
 	options.compilerArgs << '-parameters'
 }
 
-configurations {
+configurations {q
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
@@ -30,7 +30,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.h2database:h2'
@@ -40,7 +40,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation 'javax.mail:javax.mail-api:1.6.2'
-	/* spring boot 2.3 version 이상 부터는 spring-boot-starter-web 의존성 내부에 있던 validation이 삭제되었다.
+	/* spring boot 2.3 version 이상 부터는 spring-boot-starter-web 의존성 내부에 있던 validation 이 삭제되었다.
 	 sb 2.3 이상이라면 validation 의존성을 별도로 추가해 주어야 함. */
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'

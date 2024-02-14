@@ -1,7 +1,8 @@
 package com.studyland.studyland.domain;
 
-import jakarta.persistence.*;
 import lombok.*;
+
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -40,7 +41,8 @@ public class Account {
 
     private String location; // 거주 지역
 
-    @Lob @Basic(fetch = FetchType.EAGER)
+    @Lob
+    @Basic(fetch = FetchType.EAGER)
     private String profileImage;
 
     private boolean studyCreatedByEmail;
