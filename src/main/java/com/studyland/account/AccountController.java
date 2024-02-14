@@ -32,7 +32,6 @@ public class AccountController {
         model.addAttribute(new SignUpForm());
         return "account/sign-up";
     }
-
     @PostMapping("/sign-up")
     // @ModelAttribute 는 파라미터로 쓰일 때 생략 가능.
     public String signUpSubmit(@Valid SignUpForm signUpForm, Errors errors) {
@@ -74,4 +73,22 @@ public class AccountController {
         return view;
     }
 
+    @GetMapping("/check-email")
+    public String checkEmail(@CurrentUser Account account, Model model) {
+        model.addAttribute("email", account.getEmail());
+        return "account/check-email";
+    }
+
+    @GetMapping("/resend-confirm-email")
+    public String resendConfirmEmail(@CurrentUser Account account, Model model) {
+        // 해당 부분을 주석처리하면 이메일 재전송 확인이 가능함.
+        if (!account.canSendConfirmEmail()) {
+            model.addAttribute("error", "인증 이메일은 1시간에 한번만 전송할 수 있습니다.");
+            model.addAttribute("email", account.getEmail());
+            return "account/check-email";
+        }
+
+        accountService.sendSignUpConfirmEmail(account);
+        return "redirect:/";
+    }
 }

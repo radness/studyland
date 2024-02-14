@@ -56,10 +56,12 @@ public class Account {
     private boolean studyUpdateByEmail;
 
     private boolean studyUpdateByWeb;
+    private LocalDateTime emailCheckTokenGeneratedAt;
 
     // email 인증 랜덤 토큰 생성
     public void generateEmailCheckToken() {
         this.emailCheckToken = UUID.randomUUID().toString();
+        this.emailCheckTokenGeneratedAt = LocalDateTime.now();
     }
 
     public void compltesSignUp() {
@@ -69,5 +71,10 @@ public class Account {
 
     public boolean isValidToken(String token) {
         return this.emailCheckToken.equals(token);
+    }
+
+    public boolean canSendConfirmEmail() {
+        // 현재 시간에서 1시간 뺀거보다 이전에 만든 경우 = 보낼 수 있다.
+        return this.emailCheckTokenGeneratedAt.isBefore(LocalDateTime.now().minusHours(1));
     }
 }
