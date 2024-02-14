@@ -2,7 +2,34 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.18'
 	id 'io.spring.dependency-management' version '1.1.4'
+	id "com.github.node-gradle.node" version "3.1.1"
 }
+
+node {
+	version = '12.22.12'
+	download = true
+	nodeModulesDir = file("${projectDir}/src/main/resources/static")
+
+}
+task copyFrontLib(type: Copy) {
+	from "${projectDir}/src/main/resources/static"
+	into "${projectDir}/build/resources/main/static/."
+}
+copyFrontLib.dependsOn npmInstall
+compileJava.dependsOn copyFrontLib
+
+// task 등록
+//tasks.register("npm-install") {
+//	group = "application"
+//	description = "Installs dependencies from package.json"
+//	tasks.appNpmInstall.exec();
+//}
+//
+//task appNpmInstall(type: NpmTask) {
+//	description = "Installs dependencies from package.json"
+//	workingDir = file("/src/main/resources/static")
+//	args = ["install"]
+//}
 
 group = 'com.studyland'
 version = '0.0.1-SNAPSHOT'
@@ -15,7 +42,7 @@ compileJava {
 	options.compilerArgs << '-parameters'
 }
 
-configurations {q
+configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
@@ -23,6 +50,7 @@ configurations {q
 
 repositories {
 	mavenCentral()
+	gradlePluginPortal()
 }
 
 dependencies {
@@ -44,6 +72,9 @@ dependencies {
 	 sb 2.3 이상이라면 validation 의존성을 별도로 추가해 주어야 함. */
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+	// npm
+	implementation 'com.github.node-gradle:gradle-node-plugin:3.1.1'
 
 }
 
