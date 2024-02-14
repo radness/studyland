@@ -1,6 +1,7 @@
 package com.studyland.studyland.account;
 
-import com.studyland.studyland.domain.Account;
+import com.studyland.account.AccountRepository;
+import com.studyland.domain.Account;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
