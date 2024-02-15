@@ -10,6 +10,10 @@
       <div th:replace="fragments.html :: settings-menu(currentMenu='profile')"></div>
     </div>
     <div class="col-8">
+      <div th:if="${message}" class="alert alert-info alert-dismissible fade show mt-3" role="alert">
+        <span th:text="${message}">메시지</span>
+        <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close"></button>
+      </div>
       <div class="row">
         <h2 class="col-sm-12" th:text="${account.nickname}">radness</h2>
       </div>
@@ -31,7 +35,7 @@
           <div class="form-group">
             <label for="url">링크</label>
             <input id="url" type="url" th:field="*{url}" class="form-control"
-                   placeholder="http://studyland.com" aria-describedby="urlHelp" required>
+                   placeholder="https://github.com/radness" aria-describedby="urlHelp" required>
             <small id="urlHelp" class="form-text text-muted">
               블로그, 유튜브 또는 포트폴리오나 좋아하는 웹 사이트 등 본인을 표현할 수 있는 링크를 추가하세요.
             </small>

@@ -2,8 +2,10 @@ package com.studyland.settings;
 
 import com.studyland.domain.Account;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class Profile {
     private String bio;
     private String url;

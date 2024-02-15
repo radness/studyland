@@ -1,6 +1,7 @@
 package com.studyland.account;
 
 import com.studyland.domain.Account;
+import com.studyland.settings.Profile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -86,5 +87,19 @@ public class AccountService implements UserDetailsService {
     public void completeSignUp(Account account) {
         account.compltesSignUp();
         login(account);
+    }
+
+    public void updateProfile(Account account, Profile profile) {
+        /* account 객체는 persist 상태가 아니다. (detached 객체)
+        * detached 객체는 transaction 이 종료되어도 db에 반영을 하지 않는다.
+        * -> db에 sync 를 맞추는 법 : accountRepository.save 를 호출하면
+        * save 구현체 안에서 id 값이 존재하면 merge 한다.(기존 데이터에 update 해준다.) */
+        account.setUrl(profile.getUrl());
+        account.setOccupation(profile.getOccupation());
+        account.setLocation(profile.getLocation());
+        account.setBio(profile.getBio());
+        // TODO 프로필 이미지
+        accountRepository.save(account);
+        // TODO another issue
     }
 }
