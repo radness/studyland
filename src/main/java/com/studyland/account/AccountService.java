@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class AccountService implements UserDetailsService {
@@ -24,7 +25,6 @@ public class AccountService implements UserDetailsService {
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
 
-    @Transactional
     public Account processNewAccount(SignUpForm signUpForm) {
         // 리팩토링 : ctrl + alt + m
         Account newAccount = saveNewAccount(signUpForm); // 새로운 계정 저장
@@ -68,6 +68,7 @@ public class AccountService implements UserDetailsService {
         SecurityContextHolder.getContext().setAuthentication(token);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String emailOrNickname) throws UsernameNotFoundException {
         Account account = accountRepository.findByEmail(emailOrNickname);
@@ -79,5 +80,11 @@ public class AccountService implements UserDetailsService {
         }
         // 해당하는 유저가 있는 경우.
         return new UserAccount(account);
+    }
+
+    // 데이터 변경
+    public void completeSignUp(Account account) {
+        account.compltesSignUp();
+        login(account);
     }
 }

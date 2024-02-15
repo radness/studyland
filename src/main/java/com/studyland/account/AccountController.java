@@ -46,6 +46,7 @@ public class AccountController {
         return "redirect:/";
     }
 
+    // 인증 메일 처리
     @GetMapping("/check-email-token")
     // model : 화면에 전달해야할 model
     public String checkEmailToken(String token, String email, Model model) {
@@ -66,8 +67,8 @@ public class AccountController {
             return view;
         }
 
-        account.compltesSignUp();
-        accountService.login(account);
+        accountService.completeSignUp(account);
+
         // view 에 전달해줘야하는 정보
         model.addAttribute("numberOfUser", accountRepository.count());
         model.addAttribute("nickname", account.getNickname());
