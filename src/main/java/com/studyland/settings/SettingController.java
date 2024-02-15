@@ -18,8 +18,8 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class SettingController {
 
-    private static final String SETTINGS_PROFILE_VIEW_NAME = "settings/profile";
-    private static final String SETTINGS_PROFILE_URL = "/settings/profile";
+    static final String SETTINGS_PROFILE_VIEW_NAME = "settings/profile";
+    static final String SETTINGS_PROFILE_URL = "/settings/profile";
 
     // @RequiredArgsConstructor 를 선언하여 생성자 주입을 코드없이 자동으로 설정
     private final AccountService accountService;
