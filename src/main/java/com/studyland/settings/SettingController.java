@@ -11,6 +11,7 @@ import com.studyland.settings.validator.NicknameValidator;
 import com.studyland.settings.validator.PasswordFormValidator;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -44,6 +45,8 @@ public class SettingController {
     static final String SETTINGS_NOTIFICATIONS_URL = "/" + SETTINGS_NOTIFICATIONS_VIEW_NAME;
     static final String SETTINGS_ACCOUNT_VIEW_NAME = "settings/account";
     static final String SETTINGS_ACCOUNT_URL = "/" + SETTINGS_ACCOUNT_VIEW_NAME;
+    static final String SETTINGS_TAG_VIEW_NAME = "settings/tags";
+    static final String SETTINGS_TAG_URL = "/" + SETTINGS_TAG_VIEW_NAME;
 
     // @RequiredArgsConstructor 를 선언하여 생성자 주입을 코드없이 자동으로 설정
     private final AccountService accountService;
@@ -135,5 +138,11 @@ public class SettingController {
         accountService.updateNickname(account, nicknameForm.getNickname());
         attributes.addFlashAttribute("message", "닉네임을 수정했습니다.");
         return "redirect:" + SETTINGS_ACCOUNT_URL;
+    }
+
+    @GetMapping(SETTINGS_TAG_URL)
+    public String updateTags(@CurrentUser Account account, Model model) {
+        model.addAttribute(account);
+        return SETTINGS_TAG_VIEW_NAME;
     }
 }
