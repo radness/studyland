@@ -117,4 +117,14 @@ public class AccountService implements UserDetailsService {
         accountRepository.save(account);
         login(account); // login 을 별도로 해주지 않으면 nav bar 에 있는 nickname 정보가 갱신되지 않는다.
     }
+
+    // 로그인 링크를 보낸다.
+    public void sendLoginLink(Account account) {
+        account.generateEmailCheckToken();;
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(account.getEmail());
+        mailMessage.setSubject("스터디랜드, 로그인 링크");
+        mailMessage.setText("/login-by-email?token=" + account.getEmailCheckToken() + "&email=" + account.getEmail());
+        javaMailSender.send(mailMessage);
+    }
 }
