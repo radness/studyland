@@ -3,6 +3,12 @@ package com.studyland.settings;
 import com.studyland.account.AccountService;
 import com.studyland.account.CurrentUser;
 import com.studyland.domain.Account;
+import com.studyland.settings.form.NicknameForm;
+import com.studyland.settings.form.Notifications;
+import com.studyland.settings.form.PasswordForm;
+import com.studyland.settings.form.Profile;
+import com.studyland.settings.validator.NicknameValidator;
+import com.studyland.settings.validator.PasswordFormValidator;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
@@ -31,13 +37,13 @@ public class SettingController {
     }
 
     static final String SETTINGS_PROFILE_VIEW_NAME = "settings/profile";
-    static final String SETTINGS_PROFILE_URL = "/settings/profile";
+    static final String SETTINGS_PROFILE_URL = "/" + SETTINGS_PROFILE_VIEW_NAME;
     static final String SETTINGS_PASSWORD_VIEW_NAME = "settings/password";
-    static final String SETTINGS_PASSWORD_URL = "/settings/password";
+    static final String SETTINGS_PASSWORD_URL = "/" + SETTINGS_PASSWORD_VIEW_NAME;
     static final String SETTINGS_NOTIFICATIONS_VIEW_NAME = "settings/notifications";
-    static final String SETTINGS_NOTIFICATIONS_URL = "/settings/notifications";
+    static final String SETTINGS_NOTIFICATIONS_URL = "/" + SETTINGS_NOTIFICATIONS_VIEW_NAME;
     static final String SETTINGS_ACCOUNT_VIEW_NAME = "settings/account";
-    static final String SETTINGS_ACCOUNT_URL = "/settings/account";
+    static final String SETTINGS_ACCOUNT_URL = "/" + SETTINGS_ACCOUNT_VIEW_NAME;
 
     // @RequiredArgsConstructor 를 선언하여 생성자 주입을 코드없이 자동으로 설정
     private final AccountService accountService;
@@ -116,5 +122,18 @@ public class SettingController {
         model.addAttribute(account);
         model.addAttribute(modelMapper.map(account, Account.class));
         return SETTINGS_ACCOUNT_VIEW_NAME;
+    }
+
+    @PostMapping(SETTINGS_ACCOUNT_URL)
+    public String updateAccount(@CurrentUser Account account, @Valid NicknameForm nicknameForm, Errors errors,
+                                Model model, RedirectAttributes attributes) {
+        if (errors.hasErrors()) {
+            model.addAttribute(account);
+            return SETTINGS_ACCOUNT_VIEW_NAME;
+        }
+
+        accountService.updateNickname(account, nicknameForm.getNickname());
+        attributes.addFlashAttribute("message", "닉네임을 수정했습니다.");
+        return "redirect:" + SETTINGS_ACCOUNT_URL;
     }
 }

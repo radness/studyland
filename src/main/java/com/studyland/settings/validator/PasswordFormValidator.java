@@ -1,6 +1,7 @@
-package com.studyland.settings;
+package com.studyland.settings.validator;
 
 
+import com.studyland.settings.form.PasswordForm;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 

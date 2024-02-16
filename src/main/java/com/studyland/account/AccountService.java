@@ -1,8 +1,8 @@
 package com.studyland.account;
 
 import com.studyland.domain.Account;
-import com.studyland.settings.Notifications;
-import com.studyland.settings.Profile;
+import com.studyland.settings.form.Notifications;
+import com.studyland.settings.form.Profile;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.mail.SimpleMailMessage;
@@ -109,5 +109,12 @@ public class AccountService implements UserDetailsService {
     public void updateNotifications(Account account, Notifications notifications) {
         modelMapper.map(notifications, account);
         accountRepository.save(account);
+    }
+
+    public void updateNickname(Account account, String nickname) {
+        // detached 객체여서 save 를 별도로 해줘야한다.
+        account.setNickname(nickname);
+        accountRepository.save(account);
+        login(account); // login 을 별도로 해주지 않으면 nav bar 에 있는 nickname 정보가 갱신되지 않는다.
     }
 }
