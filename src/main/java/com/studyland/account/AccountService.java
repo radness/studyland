@@ -4,6 +4,7 @@ import com.studyland.domain.Account;
 import com.studyland.settings.Notifications;
 import com.studyland.settings.Profile;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,6 +27,7 @@ public class AccountService implements UserDetailsService {
     private final AccountRepository accountRepository;
     private final JavaMailSender javaMailSender;
     private final PasswordEncoder passwordEncoder;
+    private final ModelMapper modelMapper;
 
     public Account processNewAccount(SignUpForm signUpForm) {
         // 리팩토링 : ctrl + alt + m
@@ -95,13 +97,8 @@ public class AccountService implements UserDetailsService {
         * detached 객체는 transaction 이 종료되어도 db에 반영을 하지 않는다.
         * -> db에 sync 를 맞추는 법 : accountRepository.save 를 호출하면
         * save 구현체 안에서 id 값이 존재하면 merge 한다.(기존 데이터에 update 해준다.) */
-        account.setUrl(profile.getUrl());
-        account.setOccupation(profile.getOccupation());
-        account.setLocation(profile.getLocation());
-        account.setBio(profile.getBio());
-        account.setProfileImage(profile.getProfileImage());
+        modelMapper.map(profile, account);
         accountRepository.save(account);
-        // TODO another issue
     }
 
     public void updatePassword(Account account, String newPassword) {
@@ -110,12 +107,7 @@ public class AccountService implements UserDetailsService {
     }
 
     public void updateNotifications(Account account, Notifications notifications) {
-        account.setStudyCreatedByWeb(notifications.isStudyCreatedByWeb());
-        account.setStudyCreatedByEmail(notifications.isStudyCreatedByEmail());
-        account.setStudyUpdatedByWeb(notifications.isStudyUpdatedByWeb());
-        account.setStudyUpdatedByEmail(notifications.isStudyUpdatedByEmail());
-        account.setStudyEnrollmentResultByEmail(notifications.isStudyEnrollmentResultByEmail());
-        account.setStudyEnrollmentResultByWeb(notifications.isStudyEnrollmentResultByWeb());
+        modelMapper.map(notifications, account);
         accountRepository.save(account);
     }
 }
