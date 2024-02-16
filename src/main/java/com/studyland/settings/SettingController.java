@@ -17,7 +17,6 @@ import javax.validation.Valid;
 @Controller
 @RequiredArgsConstructor
 public class SettingController {
-
     static final String SETTINGS_PROFILE_VIEW_NAME = "settings/profile";
     static final String SETTINGS_PROFILE_URL = "/settings/profile";
 
@@ -25,6 +24,7 @@ public class SettingController {
     private final AccountService accountService;
 
     // model : view 를 보여줄 때사용하는 객체
+    // TODO 프로필 이미지 오류 수정 필요
     @GetMapping(SETTINGS_PROFILE_VIEW_NAME)
     public String profileUpdateForm(@CurrentUser Account account, Model model) {
         model.addAttribute(account);

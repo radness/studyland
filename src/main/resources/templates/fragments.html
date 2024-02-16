@@ -11,6 +11,11 @@
   <link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css" />
   <script src="/node_modules/jquery/dist/jquery.min.js"></script>
   <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    window.jdenticon_config = {
+        replaceMode: "observe"
+    };
+</script>
   <script src="/node_modules/jdenticon/dist/jdenticon.min.js"></script>
   <style>
         .container {
@@ -57,8 +62,10 @@
       <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink"
            role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          <svg data-jdenticon-value="user127" th:data-jdenticon-value="${#authentication.name}"
+          <svg th:if="${#strings.isEmpty(account?.profileImage)}" th:data-jdenticon-value="${#authentication.name}"
                width="24" height="24" class="rounded border bg-light"></svg>
+          <img th:if="${!#strings.isEmpty(account?.profileImage)}" th:src="${account.profileImage}"
+               width="24" height="24" class="rounded border"/>
         </a>
         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
           <h6 class="dropdown-header">
