@@ -102,4 +102,9 @@ public class AccountService implements UserDetailsService {
         accountRepository.save(account);
         // TODO another issue
     }
+
+    public void updatePassword(Account account, String newPassword) {
+        account.setPassword(passwordEncoder.encode(newPassword)); // passwordEncoder 로 암호화 처리를 반드시해줘야함.
+        accountRepository.save(account);
+    }
 }
