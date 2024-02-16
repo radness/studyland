@@ -1,6 +1,7 @@
 package com.studyland.account;
 
 import com.studyland.domain.Account;
+import com.studyland.settings.Notifications;
 import com.studyland.settings.Profile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
@@ -43,7 +44,7 @@ public class AccountService implements UserDetailsService {
                 .password(passwordEncoder.encode(signUpForm.getPassword())) // Password 인코딩
                 .studyCreatedByWeb(true)
                 .studyEnrollmentResultByWeb(true)
-                .studyUpdateByWeb(true)
+                .studyUpdatedByWeb(true)
                 .build();
 
         return accountRepository.save(account);
@@ -105,6 +106,16 @@ public class AccountService implements UserDetailsService {
 
     public void updatePassword(Account account, String newPassword) {
         account.setPassword(passwordEncoder.encode(newPassword)); // passwordEncoder 로 암호화 처리를 반드시해줘야함.
+        accountRepository.save(account);
+    }
+
+    public void updateNotifications(Account account, Notifications notifications) {
+        account.setStudyCreatedByWeb(notifications.isStudyCreatedByWeb());
+        account.setStudyCreatedByEmail(notifications.isStudyCreatedByEmail());
+        account.setStudyUpdatedByWeb(notifications.isStudyUpdatedByWeb());
+        account.setStudyUpdatedByEmail(notifications.isStudyUpdatedByEmail());
+        account.setStudyEnrollmentResultByEmail(notifications.isStudyEnrollmentResultByEmail());
+        account.setStudyEnrollmentResultByWeb(notifications.isStudyEnrollmentResultByWeb());
         accountRepository.save(account);
     }
 }

@@ -53,9 +53,9 @@ public class Account {
 
     private boolean studyEnrollmentResultByWeb;
 
-    private boolean studyUpdateByEmail;
+    private boolean studyUpdatedByEmail;
 
-    private boolean studyUpdateByWeb;
+    private boolean studyUpdatedByWeb;
     private LocalDateTime emailCheckTokenGeneratedAt;
 
     // email 인증 랜덤 토큰 생성
