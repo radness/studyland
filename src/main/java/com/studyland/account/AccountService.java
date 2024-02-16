@@ -1,6 +1,7 @@
 package com.studyland.account;
 
 import com.studyland.domain.Account;
+import com.studyland.domain.Tag;
 import com.studyland.settings.form.Notifications;
 import com.studyland.settings.form.Profile;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 @Service
@@ -126,5 +128,17 @@ public class AccountService implements UserDetailsService {
         mailMessage.setSubject("스터디랜드, 로그인 링크");
         mailMessage.setText("/login-by-email?token=" + account.getEmailCheckToken() + "&email=" + account.getEmail());
         javaMailSender.send(mailMessage);
+    }
+
+    public void addTag(Account account, Tag tag) {
+        // add 할 때 주의할 점 : account 는 detached 객체
+        // account 를 먼저 loading 해준다.
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        // byId가 있으면 account 에 tag를 추가한다.
+        // 없으면 아무일도 일어나지 않는다.
+        byId.ifPresent(a -> a.getTags().add(tag));
+        // getOne 은 lazyLoading이다. 필요한 순간에만 가져온다. EntityManager를 통해서
+        // TODO lazyLoading study 필요
+//        accountRepository.getOne()
     }
 }

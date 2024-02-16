@@ -3,23 +3,19 @@ package com.studyland.settings;
 import com.studyland.account.AccountService;
 import com.studyland.account.CurrentUser;
 import com.studyland.domain.Account;
-import com.studyland.settings.form.NicknameForm;
-import com.studyland.settings.form.Notifications;
-import com.studyland.settings.form.PasswordForm;
-import com.studyland.settings.form.Profile;
+import com.studyland.domain.Tag;
+import com.studyland.settings.form.*;
 import com.studyland.settings.validator.NicknameValidator;
 import com.studyland.settings.validator.PasswordFormValidator;
+import com.studyland.tag.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.boot.Banner;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -45,13 +41,14 @@ public class SettingController {
     static final String SETTINGS_NOTIFICATIONS_URL = "/" + SETTINGS_NOTIFICATIONS_VIEW_NAME;
     static final String SETTINGS_ACCOUNT_VIEW_NAME = "settings/account";
     static final String SETTINGS_ACCOUNT_URL = "/" + SETTINGS_ACCOUNT_VIEW_NAME;
-    static final String SETTINGS_TAG_VIEW_NAME = "settings/tags";
-    static final String SETTINGS_TAG_URL = "/" + SETTINGS_TAG_VIEW_NAME;
+    static final String SETTINGS_TAGS_VIEW_NAME = "settings/tags";
+    static final String SETTINGS_TAGS_URL = "/" + SETTINGS_TAGS_VIEW_NAME;
 
     // @RequiredArgsConstructor 를 선언하여 생성자 주입을 코드없이 자동으로 설정
     private final AccountService accountService;
     private final ModelMapper modelMapper;
     private final NicknameValidator nicknameValidator;
+    private final TagRepository tagRepository;
 
     // model : view 를 보여줄 때사용하는 객체
     // TODO 프로필 이미지 오류 수정 필요
@@ -140,9 +137,28 @@ public class SettingController {
         return "redirect:" + SETTINGS_ACCOUNT_URL;
     }
 
-    @GetMapping(SETTINGS_TAG_URL)
+    @GetMapping(SETTINGS_TAGS_URL)
     public String updateTags(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
-        return SETTINGS_TAG_VIEW_NAME;
+        return SETTINGS_TAGS_VIEW_NAME;
+    }
+
+    //@RequestBody : 요청 본문에 data 가 들어온다.
+    @PostMapping("/settings/tags/add")
+    @ResponseBody
+    public ResponseEntity<Object> addTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
+        String title = tagForm.getTagTitle();
+        // title로 tag 파일을 찾아보고 없으면 title에 해당하는 데이터를 저장해서 받아온다.
+        /* Optional 사용하는 경우 */
+//        Tag tag = tagRepository.findByTitle(title).orElseGet(() -> tagRepository.save(Tag.builder()
+//                        .title(tagForm.getTagTitle())
+//                .build()));
+        Tag tag = tagRepository.findByTitle(title);
+        if (tag == null) {
+            tag = tagRepository.save(Tag.builder().title(tagForm.getTagTitle()).build());
+        }
+
+        accountService.addTag(account, tag);
+        return ResponseEntity.ok().build();
     }
 }
