@@ -19,14 +19,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
 public class SettingController {
-    @InitBinder("passwordForm")
-    public void passwordFormInitBinder(WebDataBinder webDataBinder) {
-        webDataBinder.addValidators(new PasswordFormValidator());
-    }
     // nicknameForm 을 처리할 때 nicknameValidator 를 추가한다.
     @InitBinder("nicknameForm")
     public void nicknameFormInitBinder(WebDataBinder webDataBinder) {
@@ -49,6 +47,11 @@ public class SettingController {
     private final ModelMapper modelMapper;
     private final NicknameValidator nicknameValidator;
     private final TagRepository tagRepository;
+
+    @InitBinder("passwordForm")
+    public void passwordFormInitBinder(WebDataBinder webDataBinder) {
+        webDataBinder.addValidators(new PasswordFormValidator());
+    }
 
     // model : view 를 보여줄 때사용하는 객체
     // TODO 프로필 이미지 오류 수정 필요
@@ -140,13 +143,18 @@ public class SettingController {
     @GetMapping(SETTINGS_TAGS_URL)
     public String updateTags(@CurrentUser Account account, Model model) {
         model.addAttribute(account);
+        Set<Tag> tags = accountService.getTags(account);
+        // tags 문자열로 전송 (메서드 체이닝)
+        // stream 을 map 으로 그 안에 들어있는 tag 들을 tagTitle 만 가져온다.(문자열로)
+        // 문자열로 수집해서 Collectors 의 list 로 변환해서 보낸다.
+        model.addAttribute("tags", tags.stream().map(Tag::getTitle).collect(Collectors.toList()));
         return SETTINGS_TAGS_VIEW_NAME;
     }
 
     //@RequestBody : 요청 본문에 data 가 들어온다.
     @PostMapping("/settings/tags/add")
     @ResponseBody
-    public ResponseEntity<Object> addTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
+    public ResponseEntity addTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
         String title = tagForm.getTagTitle();
         // title로 tag 파일을 찾아보고 없으면 title에 해당하는 데이터를 저장해서 받아온다.
         /* Optional 사용하는 경우 */
@@ -155,7 +163,7 @@ public class SettingController {
 //                .build()));
         Tag tag = tagRepository.findByTitle(title);
         if (tag == null) {
-            tag = tagRepository.save(Tag.builder().title(tagForm.getTagTitle()).build());
+            tag = tagRepository.save(Tag.builder().title(title).build());
         }
 
         accountService.addTag(account, tag);

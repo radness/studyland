@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Transactional
 @Service
@@ -140,5 +141,16 @@ public class AccountService implements UserDetailsService {
         // getOne 은 lazyLoading이다. 필요한 순간에만 가져온다. EntityManager를 통해서
         // TODO lazyLoading study 필요
 //        accountRepository.getOne()
+    }
+
+    public Set<Tag> getTags(Account account) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        // 없으면 에러를 던지고 있으면 tag 정보를 return
+        return byId.orElseThrow().getTags();
+    }
+
+    public void removeTag(Account account, Tag tag) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        byId.ifPresent(a -> a.getTags().remove(tag));
     }
 }
