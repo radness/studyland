@@ -18,6 +18,11 @@ task copyFrontLib(type: Copy) {
 copyFrontLib.dependsOn npmInstall
 compileJava.dependsOn copyFrontLib
 
+compileJava.options.encoding = 'UTF-8'
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
 // task 등록
 //tasks.register("npm-install") {
 //	group = "application"
