@@ -4,7 +4,6 @@ package com.studyland.settings.validator;
 import com.studyland.account.AccountRepository;
 import com.studyland.domain.Account;
 import com.studyland.settings.form.NicknameForm;
-import com.studyland.settings.form.PasswordForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -18,7 +17,7 @@ public class NicknameValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> clazz) {
-        return PasswordForm.class.isAssignableFrom(clazz);
+        return NicknameForm.class.isAssignableFrom(clazz);
     }
 
     @Override
@@ -26,7 +25,7 @@ public class NicknameValidator implements Validator {
         NicknameForm nicknameForm = (NicknameForm) target;
         Account byNickname = accountRepository.findByNickname(nicknameForm.getNickname());
         if (byNickname != null) {
-            errors.rejectValue("nickname", "wrong.value", "입력한 닉네임을 사용할 수 없습니다.");
+            errors.rejectValue("nickname", "wrong.value", "입력하신 닉네임을 사용할 수 없습니다.");
         }
     }
 }

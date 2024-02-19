@@ -63,6 +63,10 @@ public class Account {
     // 비어있는 Collection 을 setting 해주는것이 좋다.
     @ManyToMany
     private Set<Tag> tags = new HashSet<>();
+
+    @ManyToMany
+    private Set<Zone> zones = new HashSet<>();
+
     // email 인증 랜덤 토큰 생성
     public void generateEmailCheckToken() {
         this.emailCheckToken = UUID.randomUUID().toString();

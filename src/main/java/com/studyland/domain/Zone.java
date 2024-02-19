@@ -26,5 +26,8 @@ public class Zone {
     @Column(nullable = true) // null 허용
     private String province; // 지역
 
-
+    @Override
+    public String toString() {
+        return String.format("%s(%s)/%s", city, localNameOfCity, province);
+    }
 }
