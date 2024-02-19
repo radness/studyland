@@ -1,5 +1,7 @@
 package com.studyland.settings;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.studyland.account.AccountService;
 import com.studyland.account.CurrentUser;
 import com.studyland.domain.Account;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -47,6 +50,7 @@ public class SettingController {
     private final ModelMapper modelMapper;
     private final NicknameValidator nicknameValidator;
     private final TagRepository tagRepository;
+    private final ObjectMapper objectMapper;
 
     @InitBinder("passwordForm")
     public void passwordFormInitBinder(WebDataBinder webDataBinder) {
@@ -141,13 +145,20 @@ public class SettingController {
     }
 
     @GetMapping(SETTINGS_TAGS_URL)
-    public String updateTags(@CurrentUser Account account, Model model) {
+    public String updateTags(@CurrentUser Account account, Model model) throws JsonProcessingException {
         model.addAttribute(account);
         Set<Tag> tags = accountService.getTags(account);
         // tags 문자열로 전송 (메서드 체이닝)
         // stream 을 map 으로 그 안에 들어있는 tag 들을 tagTitle 만 가져온다.(문자열로)
         // 문자열로 수집해서 Collectors 의 list 로 변환해서 보낸다.
         model.addAttribute("tags", tags.stream().map(Tag::getTitle).collect(Collectors.toList()));
+
+        List<String> allTags = tagRepository.findAll().stream().map(Tag::getTitle).collect(Collectors.toList());
+
+        // json 문자열로 변환 : Object Mapper(스프링 부트에는 fasterxml 이 제공하는 ObjectMapper 가 기본적으로 의존성에 들어가 있다.
+        // ObjectMapper 는 Bean 으로 등록되어 있음.
+        model.addAttribute("whitelist", objectMapper.writeValueAsString(allTags));
+
         return SETTINGS_TAGS_VIEW_NAME;
     }
 
