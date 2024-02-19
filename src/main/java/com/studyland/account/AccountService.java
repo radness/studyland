@@ -36,21 +36,26 @@ public class AccountService implements UserDetailsService {
         // 리팩토링 : ctrl + alt + m
         Account newAccount = saveNewAccount(signUpForm); // 새로운 계정 저장
         // email 보내기
-        newAccount.generateEmailCheckToken(); // 토큰 생성
+//        newAccount.generateEmailCheckToken(); // 토큰 생성
         sendSignUpConfirmEmail(newAccount); // 확인 이메일 보내기
         return newAccount;
     }
 
     private Account saveNewAccount(SignUpForm signUpForm) {
-        Account account = Account.builder()
-                .email(signUpForm.getEmail())
-                .nickname(signUpForm.getNickname())
-//                .password(signUpForm.getPassword())
-                .password(passwordEncoder.encode(signUpForm.getPassword())) // Password 인코딩
-                .studyCreatedByWeb(true)
-                .studyEnrollmentResultByWeb(true)
-                .studyUpdatedByWeb(true)
-                .build();
+        // 암호 인코딩
+        signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
+        // email, nickname 등 기본값을 생성
+        Account account = modelMapper.map(signUpForm, Account.class);
+        account.generateEmailCheckToken();
+//        Account account = Account.builder()
+//                .email(signUpForm.getEmail())
+//                .nickname(signUpForm.getNickname())
+////                .password(signUpForm.getPassword())
+//                .password(passwordEncoder.encode(signUpForm.getPassword())) // Password 인코딩
+//                .studyCreatedByWeb(true)
+//                .studyEnrollmentResultByWeb(true)
+//                .studyUpdatedByWeb(true)
+//                .build();
 
         return accountRepository.save(account);
     }
