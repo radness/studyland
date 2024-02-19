@@ -154,7 +154,7 @@ public class SettingController {
     //@RequestBody : 요청 본문에 data 가 들어온다.
     @PostMapping("/settings/tags/add")
     @ResponseBody
-    public ResponseEntity addTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
+    public ResponseEntity<Object> addTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
         String title = tagForm.getTagTitle();
         // title로 tag 파일을 찾아보고 없으면 title에 해당하는 데이터를 저장해서 받아온다.
         /* Optional 사용하는 경우 */
@@ -167,6 +167,18 @@ public class SettingController {
         }
 
         accountService.addTag(account, tag);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping(SETTINGS_TAGS_URL + "/remove")
+    @ResponseBody
+    public ResponseEntity<Object> removeTag(@CurrentUser Account account, @RequestBody TagForm tagForm) {
+        String title = tagForm.getTagTitle();
+        Tag tag = tagRepository.findByTitle(title);
+        if (tag == null) {
+            tag = tagRepository.save(Tag.builder().title(title).build());
+        }
+        accountService.removeTag(account, tag);
         return ResponseEntity.ok().build();
     }
 }
