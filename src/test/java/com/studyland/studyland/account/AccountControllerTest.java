@@ -2,6 +2,8 @@ package com.studyland.studyland.account;
 
 import com.studyland.account.AccountRepository;
 import com.studyland.domain.Account;
+import com.studyland.mail.EmailMessage;
+import com.studyland.mail.EmailService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +39,7 @@ public class AccountControllerTest {
 
     // Mocking
     @MockBean
-    JavaMailSender javaMailSender;
+    EmailService emailService;
 
     @DisplayName("인증 메일 확인 - 입력값 오류")
     @Test
@@ -118,7 +120,7 @@ public class AccountControllerTest {
         assertNotEquals(account.getPassword(), "12345678");
         assertNotNull(account.getEmailCheckToken()); // 토큰이 null인지 확인
         // 랜덤한 인스턴스 타입을 가지고 send를 호출했는지 확인
-        then(javaMailSender).should().send(any(SimpleMailMessage.class));
+        then(emailService).should().sendEmail(any(EmailMessage.class));
     }
 
 }

@@ -3,12 +3,14 @@ package com.studyland.account;
 import com.studyland.domain.Account;
 import com.studyland.domain.Tag;
 import com.studyland.domain.Zone;
+import com.studyland.mail.EmailMessage;
+import com.studyland.mail.EmailService;
 import com.studyland.settings.form.Notifications;
 import com.studyland.settings.form.Profile;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,13 +25,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+@Slf4j // 로깅
 @Transactional
 @Service
 @RequiredArgsConstructor
 public class AccountService implements UserDetailsService {
 
     private final AccountRepository accountRepository;
-    private final JavaMailSender javaMailSender;
+    private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
 
@@ -62,13 +65,22 @@ public class AccountService implements UserDetailsService {
     }
 
     public void sendSignUpConfirmEmail(Account newAccount) {
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setTo(newAccount.getEmail());
-        simpleMailMessage.setSubject("스터디랜드, 회원 가입 인증"); // 제목
-        // 본문, 만들어보낸 토큰값을 가져와서 매개변수로 전달.
-        simpleMailMessage.setText("/check-email-token?token=" + newAccount.getEmailCheckToken()
-                + "&email=" + newAccount.getEmail());
-        javaMailSender.send(simpleMailMessage);
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to(newAccount.getEmail())
+                .subject("스터디랜드, 회원 가입 인증")
+                .message("/check-email-token?token=" + newAccount.getEmailCheckToken() +
+                        "&email=" + newAccount.getEmail())
+                .build();
+
+        emailService.sendEmail(emailMessage);
+
+//        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+//        simpleMailMessage.setTo(newAccount.getEmail());
+//        simpleMailMessage.setSubject("스터디랜드, 회원 가입 인증"); // 제목
+//        // 본문, 만들어보낸 토큰값을 가져와서 매개변수로 전달.
+//        simpleMailMessage.setText("/check-email-token?token=" + newAccount.getEmailCheckToken()
+//                + "&email=" + newAccount.getEmail());
+//        javaMailSender.send(simpleMailMessage);
     }
 
     public void login(Account account) {
@@ -129,12 +141,13 @@ public class AccountService implements UserDetailsService {
 
     // 로그인 링크를 보낸다.
     public void sendLoginLink(Account account) {
-        account.generateEmailCheckToken();;
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(account.getEmail());
-        mailMessage.setSubject("스터디랜드, 로그인 링크");
-        mailMessage.setText("/login-by-email?token=" + account.getEmailCheckToken() + "&email=" + account.getEmail());
-        javaMailSender.send(mailMessage);
+        EmailMessage emailMessage = EmailMessage.builder()
+                .to(account.getEmail())
+                .subject("스터디랜드, 로그인 링크")
+                .message("/login-by-email?token=" + account.getEmailCheckToken()
+                        + "&email=" + account.getEmail())
+                .build();
+        emailService.sendEmail(emailMessage);
     }
 
     public void addTag(Account account, Tag tag) {
