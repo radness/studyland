@@ -3,8 +3,8 @@ package com.studyland.domain;
 import lombok.*;
 
 import javax.persistence.*;
-import java.lang.reflect.Member;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -15,9 +15,9 @@ public class Study {
     @Id @GeneratedValue
     private Long id;
     @ManyToMany
-    private Set<Account> managers; // 관리 매니저
+    private Set<Account> managers = new HashSet<>(); // 관리 매니저
     @ManyToMany
-    private Set<Member> members;
+    private Set<Account> members = new HashSet<>();
     @Column(unique = true)
     private String path;
     private String title;
@@ -28,9 +28,9 @@ public class Study {
     @Lob @Basic(fetch = FetchType.EAGER)
     private  String image;
     @ManyToMany
-    private Set<Tag> tags;
+    private Set<Tag> tags = new HashSet<>();
     @ManyToMany
-    private Set<Tag> zones;
+    private Set<Zone> zones= new HashSet<>();
     private LocalDateTime publishedDateTime;
     private LocalDateTime closedDateTime;
     private LocalDateTime recruitingUpdatedDateTime;
@@ -39,5 +39,8 @@ public class Study {
     private boolean closed;
     private boolean useBanner;
 
+    public void addManager(Account account) {
+        this.managers.add(account);
+    }
 }
 
