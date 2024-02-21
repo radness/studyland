@@ -53,11 +53,7 @@ public class StudyController {
 
     @GetMapping("/study/{path}")
     public String viewStudy(@CurrentUser Account account, @PathVariable String path, Model model) {
-        Study study = studyRepository.findByPath(path);
-        if (study == null) {
-            throw new IllegalArgumentException(path + "에 해당하는 스터디가 없습니다.");
-        }
-
+        Study study = studyService.getStudy(path);
         model.addAttribute(account);
         model.addAttribute(study);
         return "study/view"; // view 이름 리턴
@@ -65,8 +61,9 @@ public class StudyController {
 
     @GetMapping("/study/{path}/members")
     public String viewStudyMembers(@CurrentUser Account account, @PathVariable String path, Model model) {
+        Study study = studyService.getStudy(path);
         model.addAttribute(account);
-        model.addAttribute(studyRepository.findByPath(path));
+        model.addAttribute(study);
         return "study/members";
     }
 }

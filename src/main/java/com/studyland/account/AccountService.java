@@ -40,6 +40,8 @@ public class AccountService implements UserDetailsService {
     private final TemplateEngine templateEngine; // 타임리프 템플릿 엔진
     private final AppProperties appProperties;
 
+    /* sendSignUpConfirmEmail 에서 RuntimeException 이 발생하게 되면 Transection은 rollback 된다.
+    * 즉 새로운 newAccount는 저장되지 않는다. */
     public Account processNewAccount(SignUpForm signUpForm) {
         // 리팩토링 : ctrl + alt + m
         Account newAccount = saveNewAccount(signUpForm); // 새로운 계정 저장
@@ -207,5 +209,13 @@ public class AccountService implements UserDetailsService {
     public void removeZone(Account account, Zone zone) {
         Optional<Account> byId = accountRepository.findById(account.getId());
         byId.ifPresent(a -> a.getZones().remove(zone));
+    }
+
+    public Account getAccount(String nickname) {
+        Account account = accountRepository.findByNickname(nickname);
+        if (account == null) {
+            throw new IllegalArgumentException(nickname + "에 해당하는 사용자가 없습니다.");
+        }
+        return account;
     }
 }
