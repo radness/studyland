@@ -5,6 +5,8 @@ import lombok.*;
 import org.springframework.security.core.userdetails.User;
 
 import javax.persistence.*;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -68,5 +70,14 @@ public class Study {
     public void addMemeber(Account account) {
         this.members.add(account);
     }
+
+    public boolean isManagedBy(Account account) {
+        return this.getManagers().contains(account);
+    }
+
+    public String getEncodedPath() {
+        return URLEncoder.encode(this.path, StandardCharsets.UTF_8);
+    }
+
 }
 
