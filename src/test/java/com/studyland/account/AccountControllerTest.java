@@ -1,4 +1,4 @@
-package com.studyland.studyland.account;
+package com.studyland.account;
 
 import com.studyland.account.AccountRepository;
 import com.studyland.domain.Account;
