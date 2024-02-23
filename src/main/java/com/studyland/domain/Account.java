@@ -86,4 +86,7 @@ public class Account {
         // 현재 시간에서 1시간 뺀거보다 이전에 만든 경우 = 보낼 수 있다.
         return this.emailCheckTokenGeneratedAt.isBefore(LocalDateTime.now().minusHours(1));
     }
+    public boolean isManagerOf(Study study) {
+        return study.getManagers().contains(this);
+    }
 }

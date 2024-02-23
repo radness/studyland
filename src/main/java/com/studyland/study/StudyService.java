@@ -5,7 +5,6 @@ import com.studyland.domain.Study;
 import com.studyland.study.form.StudyDescriptionForm;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +17,6 @@ public class StudyService {
 
     private final StudyRepository studyRepository;
     private final ModelMapper modelMapper;
-    private final ApplicationEventPublisher eventPublisher;
 
     public Study createNewStudy(Study study, Account account) {
         Study newStudy = studyRepository.save(study);
@@ -26,10 +24,13 @@ public class StudyService {
         return newStudy;
     }
 
-    public Study getStudyToUpdate(Account account, String path) throws AccessDeniedException {
+    public Study getStudyToUpdate(Account account, String path) {
         Study study = this.getStudy(path);
         // 권한이 있는 사용자인지 체크하고 가져온다.
-        checkIfManager(account, study);
+        if (!account.isManagerOf(study)) {
+            throw new org.springframework.security.access.AccessDeniedException("해당 기능을 사용할 수 없습니다.");
+        }
+//        checkIfManager(account, study);
         return study;
     }
 
@@ -54,5 +55,17 @@ public class StudyService {
 
     public void updateStudyDescription(Study study, StudyDescriptionForm studyDescriptionForm) {
         modelMapper.map(studyDescriptionForm, study);
+    }
+
+    public void updateStudyImage(Study study, String image) {
+        study.setImage(image);
+    }
+
+    public void enableStudyBanner(Study study) {
+        study.setUseBanner(true);
+    }
+
+    public void disableStudyBanner(Study study) {
+        study.setUseBanner(false);
     }
 }
