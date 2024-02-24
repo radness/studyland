@@ -2,13 +2,14 @@ package com.studyland.study;
 
 import com.studyland.domain.Account;
 import com.studyland.domain.Study;
+import com.studyland.domain.Tag;
 import com.studyland.study.form.StudyDescriptionForm;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.nio.file.AccessDeniedException;
+import org.springframework.security.access.AccessDeniedException;
 
 @Service
 @Transactional
@@ -40,7 +41,7 @@ public class StudyService {
         return study;
     }
 
-    private void checkIfManager(Account account, Study study) throws AccessDeniedException {
+    private void checkIfManager(Account account, Study study) {
         if (!study.isManagedBy(account)) {
             // AccessDeniedException : spring security
             throw new AccessDeniedException("해당 기능을 사용할 수 없습니다.");
@@ -67,5 +68,20 @@ public class StudyService {
 
     public void disableStudyBanner(Study study) {
         study.setUseBanner(false);
+    }
+
+    public Study getStudyToUpdateTag(Account account, String path) {
+        Study study = studyRepository.findAccountWithTagsByPath(path);
+        checkIfExistingStudy(path, study);
+        checkIfManager(account, study);
+        return study;
+    }
+
+    public void addTag(Study study, Tag tag) {
+        study.getTags().add(tag);
+    }
+
+    public void removeTag(Study study, Tag tag) {
+        study.getTags().remove(tag);
     }
 }
