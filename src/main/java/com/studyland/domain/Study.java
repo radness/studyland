@@ -2,7 +2,6 @@ package com.studyland.domain;
 
 import com.studyland.account.UserAccount;
 import lombok.*;
-import org.springframework.security.core.userdetails.User;
 
 import javax.persistence.*;
 import java.net.URLEncoder;
@@ -17,6 +16,14 @@ import java.util.Set;
         @NamedAttributeNode("managers"),
         @NamedAttributeNode("members"),
 })
+@NamedEntityGraph(name = "Study.withTagsAndManagers", attributeNodes = {
+        @NamedAttributeNode("tags"),
+        @NamedAttributeNode("managers")})
+@NamedEntityGraph(name = "Study.withZonesAndManagers", attributeNodes = {
+        @NamedAttributeNode("zones"),
+        @NamedAttributeNode("managers")})
+@NamedEntityGraph(name = "Study.withManagers", attributeNodes = {
+        @NamedAttributeNode("managers")})
 @Entity
 @Getter
 @Setter @EqualsAndHashCode(of = "id")
@@ -67,7 +74,7 @@ public class Study {
         return this.managers.contains(userAccount.getAccount());
     }
 
-    public void addMemeber(Account account) {
+    public void addMember(Account account) {
         this.members.add(account);
     }
 

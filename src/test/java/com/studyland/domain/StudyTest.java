@@ -48,7 +48,7 @@ class StudyTest {
     void isJoinable_false_for_member() {
         study.setPublished(true);
         study.setRecruiting(true);
-        study.addMemeber(account);
+        study.addMember(account);
 
         assertFalse(study.isJoinable(userAccount));
     }
@@ -77,7 +77,7 @@ class StudyTest {
     @DisplayName("스터디 멤버인지 확인")
     @Test
     void isMember() {
-        study.addMemeber(account);
+        study.addMember(account);
         assertTrue(study.isMember(userAccount));
     }
 
