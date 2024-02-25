@@ -125,5 +125,10 @@ public class Study {
     public boolean canUpdateRecruiting() {
         return this.published && this.recruitingUpdatedDateTime == null || this.recruitingUpdatedDateTime.isBefore(LocalDateTime.now().minusHours(1));
     }
+
+    public boolean isRemovable() {
+        // 모임을 생성했던 스터디는 삭제할 수 없다.
+        return !this.published;
+    }
 }
 

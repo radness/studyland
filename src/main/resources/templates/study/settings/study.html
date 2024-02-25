@@ -117,7 +117,9 @@
                 </div>
 
                 <hr/>
-                <div class="row">
+                <!-- isRemovable() 타임리프가 제공하는 variable expression 안에는 스프링 expression 을 사용할 수 있다. -->
+                <!-- view 에서 boolean 값을 가져다 보여줄 수 있다. -->
+                <div class="row" th:if="${study.isRemovable()}">
                     <h5 class="col-sm-12 text-danger">스터디 삭제</h5>
                     <form class="col-sm-12" action="#" th:action="@{'/study/' + ${study.getPath()} + '/settings/study/remove'}" method="post" novalidate>
                         <div class="alert alert-danger" role="alert">
@@ -131,6 +133,17 @@
                         </div>
                         <div class="form-group">
                             <button class="btn btn-outline-danger" type="submit" aria-describedby="submitHelp">스터디 삭제</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="row" th:if="${!study.isRemovable()}">
+                    <h5 class="col-sm-12 text-danger">스터디 삭제</h5>
+                    <form class="col-sm-12" action="#" th:action="@{'/study/' + ${study.getPath()} + '/settings/study/remove'}" method="post" novalidate>
+                        <div class="alert alert-danger" role="alert">
+                            공개 중이고 모임을 했던 스터디는 삭제할 수 없습니다.
+                        </div>
+                        <div class="form-group">
+                            <button class="btn btn-outline-danger" type="submit" aria-describedby="submitHelp" disabled>스터디 삭제</button>
                         </div>
                     </form>
                 </div>
