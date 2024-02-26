@@ -9,6 +9,12 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+// N+1 문제 해결
+// Event를 조회할 때 Enrollments도 같이 조회한다.
+@NamedEntityGraph(
+        name = "Event.withEnrollments",
+        attributeNodes = @NamedAttributeNode("enrollments")
+)
 @Entity
 @Getter
 @Setter

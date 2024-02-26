@@ -7,7 +7,6 @@ import com.studyland.domain.Study;
 import com.studyland.event.form.EventForm;
 import com.studyland.event.validator.EventValidator;
 import com.studyland.study.StudyService;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
@@ -17,7 +16,9 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.awt.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/study/{path}")
@@ -69,5 +70,28 @@ public class EventController {
         model.addAttribute(eventRepository.findById(id).orElseThrow());
         model.addAttribute(studyService.getStudy(path));
         return "event/view";
+    }
+
+    @GetMapping("/events")
+    public String viewStudyEvents(@CurrentUser Account account, @PathVariable String path, Model model) {
+        Study study = studyService.getStudy(path);
+        model.addAttribute(account);
+        model.addAttribute(study);
+
+        List<Event> events = eventRepository.findByStudyOrderByStartDateTime(study);
+        List<Event> newEvents = new ArrayList<>();
+        List<Event> oldEvents = new ArrayList<>();
+        events.forEach(e -> {
+            if (e.getEndDateTime().isBefore(LocalDateTime.now())) {
+                oldEvents.add(e);
+            } else {
+                newEvents.add(e);
+            }
+        });
+
+        model.addAttribute("newEvents", newEvents);
+        model.addAttribute("oldEvents", oldEvents);
+
+        return "study/events";
     }
 }
