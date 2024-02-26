@@ -7,6 +7,7 @@ import com.studyland.domain.Study;
 import com.studyland.event.form.EventForm;
 import com.studyland.event.validator.EventValidator;
 import com.studyland.study.StudyService;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,7 @@ public class EventController {
     private final EventService eventService;
     private final ModelMapper modelMapper;
     private final EventValidator eventValidator;
+    private final EventRepository eventRepository;
 
     @InitBinder("eventForm")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -57,5 +59,15 @@ public class EventController {
         // 데이터를 변경하는 작업은 서비스에 위임하겠다.
         Event event = eventService.createEvent(modelMapper.map(eventForm, Event.class), study, account);
         return "redirect:/study/" + study.getEncodedPath() + "/events/" + event.getId();
+    }
+
+    @GetMapping("/events/{id}")
+    public String getEvent(@CurrentUser Account account, @PathVariable String path, @PathVariable Long id,
+                           Model model) {
+        model.addAttribute(account);
+        // 있으면 리턴하고 없으면 orElseThrow 에러 페이지 표시
+        model.addAttribute(eventRepository.findById(id).orElseThrow());
+        model.addAttribute(studyService.getStudy(path));
+        return "event/view";
     }
 }

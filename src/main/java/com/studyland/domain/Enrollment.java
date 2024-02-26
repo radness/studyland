@@ -31,6 +31,6 @@ public class Enrollment {
     
     private boolean accepted; // 수략 여부
     
-    private boolean attend; // 참석 여부
+    private boolean attended; // 참석 여부
 
 }
