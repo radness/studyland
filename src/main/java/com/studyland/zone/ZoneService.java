@@ -25,10 +25,9 @@ public class ZoneService {
     // spring 초기 버전 제공. Bean 이 초기화 된 후 코드 블럭이 실행된다.
     @PostConstruct
     public void initZoneData() throws IOException {
-        String filePath = "zones_kr.csv";
         if (zoneRepository.count() == 0) {
             // Resource -> 스프링 핵심 기술 강의에 설명이 되어있음.
-            Resource resource = new ClassPathResource(filePath);
+            Resource resource = new ClassPathResource("zones_kr.csv");
             // zones_kr 파일에 있는 데이터를 객체로 읽어온다.
             List<Zone> zoneList = Files.readAllLines(resource.getFile().toPath(), StandardCharsets.UTF_8).stream()
                     .map(line -> {
