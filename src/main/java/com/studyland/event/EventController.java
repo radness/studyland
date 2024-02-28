@@ -128,4 +128,14 @@ public class EventController {
         return "redirect:/study/" + study.getEncodedPath() +  "/events/" + event.getId();
     }
 
+    // HTML의 form은 method로 GET과 POST만 지원한다.(DELETE 지원 안한다.)
+    // DeleteMapping으로 변경하고 싶다면.. springboot에 아래 속성을 추가
+    // spring.mvc.hiddenmethod.filter.enabled=true
+    @DeleteMapping("/events/{id}")
+    public String cancelEvent(@CurrentUser Account account, @PathVariable String path, @PathVariable Long id) {
+        Study study = studyService.getStudyToUpdateStatus(account, path);
+        eventService.deleteEvent(eventRepository.findById(id).orElseThrow());
+        return "redirect:/study/" + study.getEncodedPath() + "/events";
+    }
+
 }
