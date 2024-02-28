@@ -16,6 +16,8 @@ public class EventForm {
     @Length(max = 50)
     private String title;
 
+    private String description;
+
     private EventType eventType = EventType.FCFS; // 기본값은 선착순 선택이 되어진 상태로
 
     // DateTimeFormat.ISO.DATE_TIME = yyy-MM-dd'T'HH:mm:ss.SSSXXX
