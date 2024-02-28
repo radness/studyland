@@ -8,6 +8,7 @@ import com.studyland.event.form.EventForm;
 import com.studyland.event.validator.EventValidator;
 import com.studyland.study.StudyService;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.lang.annotation.DeclareError;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -106,4 +107,25 @@ public class EventController {
         model.addAttribute(modelMapper.map(event, EventForm.class));
         return "event/update-form";
     }
+
+    @PostMapping("/events/{id}/edit")
+    public String updateEventSubmit(@CurrentUser Account account, @PathVariable String path,
+                                    @PathVariable Long id, @Valid EventForm eventForm,
+                                    Errors errors, Model model) {
+        Study study = studyService.getStudyToUpdate(account, path);
+        Event event = eventRepository.findById(id).orElseThrow();
+        eventForm.setEventType(event.getEventType());
+        eventValidator.validateUpdateForm(eventForm, event, errors);
+
+        if (errors.hasErrors()) {
+            model.addAttribute(account);
+            model.addAttribute(study);
+            model.addAttribute(event);
+            return "event/update-form";
+        }
+
+        eventService.updateEvent(event, eventForm);
+        return "redirect:/study/" + study.getEncodedPath() +  "/events/" + event.getId();
+    }
+
 }

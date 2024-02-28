@@ -1,10 +1,12 @@
 package com.studyland.event.validator;
 
+import com.studyland.domain.Event;
 import com.studyland.event.form.EventForm;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 // @Component 어노테이션을 사용하면 Bean 으로 등록된다.
@@ -41,5 +43,11 @@ public class EventValidator implements Validator {
     private boolean isNotValidEndDateTime(EventForm eventForm) {
         LocalDateTime endDateTime = eventForm.getEndDateTime();
         return endDateTime.isBefore(eventForm.getStartDateTime()) || endDateTime.isBefore(eventForm.getEndEnrollmentDateTime());
+    }
+
+    public void validateUpdateForm(EventForm eventForm, Event event, Errors errors) {
+        if (eventForm.getLimitOfEnrollments() < event.getNumberOfAcceptedEnrollments()) {
+            errors.rejectValue("limitOfEnrollments", "wrong.value", "확인된 참기 신청보다 모집 인원 수가 커야 합니다.");
+        }
     }
 }

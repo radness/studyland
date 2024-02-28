@@ -17,7 +17,7 @@
             </div>
             <div class="col-4 text-right justify-content-end">
                 <span sec:authorize="isAuthenticated()">
-                    <button th:if="${event.isEnrollableFor(#authentication.principal)}"
+                    <button th:if="${!event.isEnrollableFor(#authentication.principal)}"
                             class="btn btn-outline-primary" data-toggle="modal" data-target="#enroll">
                         <i class="fa fa-plus-circle"></i> 참가 신청
                     </button>
