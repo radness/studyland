@@ -11,7 +11,7 @@ node {
 	nodeModulesDir = file("${projectDir}/src/main/resources/static")
 
 }
-task copyFrontLib(type: Copy) {
+tasks.register('copyFrontLib', Copy) {
 	from "${projectDir}/src/main/resources/static"
 	into "${projectDir}/build/resources/main/static/."
 }
@@ -19,7 +19,7 @@ copyFrontLib.dependsOn npmInstall
 compileJava.dependsOn copyFrontLib
 
 compileJava.options.encoding = 'UTF-8'
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
 	options.encoding = 'UTF-8'
 }
 
