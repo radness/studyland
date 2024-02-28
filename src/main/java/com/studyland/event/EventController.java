@@ -6,6 +6,7 @@ import com.studyland.domain.Event;
 import com.studyland.domain.Study;
 import com.studyland.event.form.EventForm;
 import com.studyland.event.validator.EventValidator;
+import com.studyland.study.StudyRepository;
 import com.studyland.study.StudyService;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.annotation.DeclareError;
@@ -31,6 +32,7 @@ public class EventController {
     private final ModelMapper modelMapper;
     private final EventValidator eventValidator;
     private final EventRepository eventRepository;
+    private final StudyRepository studyRepository;
 
     @InitBinder("eventForm")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -138,4 +140,18 @@ public class EventController {
         return "redirect:/study/" + study.getEncodedPath() + "/events";
     }
 
+    // 새로운 등록 만들기
+    @PostMapping("/events/{id}/enroll")
+    public String newEnrollment(@CurrentUser Account account, @PathVariable String path, @PathVariable Long id) {
+        Study study = studyService.getStudyToEnroll(path);
+        eventService.newEnrollment(eventRepository.findById(id).orElseThrow(), account);
+        return "redirect:/study/" + study.getEncodedPath() + "/events/" + id;
+    }
+
+    @PostMapping("/events/{id}/disenroll")
+    public String cancelEnrollment(@CurrentUser Account account, @PathVariable String path, @PathVariable Long id) {
+        Study study = studyService.getStudyToEnroll(path);
+        eventService.cancelEnrollment(eventRepository.findById(id).orElseThrow(), account);
+        return "redirect:/study" + study.getEncodedPath() + "/events/" + id;
+    }
 }

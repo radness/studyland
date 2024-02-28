@@ -17,7 +17,7 @@
             </div>
             <div class="col-4 text-right justify-content-end">
                 <span sec:authorize="isAuthenticated()">
-                    <button th:if="${!event.isEnrollableFor(#authentication.principal)}"
+                    <button th:if="${event.isEnrollableFor(#authentication.principal)}"
                             class="btn btn-outline-primary" data-toggle="modal" data-target="#enroll">
                         <i class="fa fa-plus-circle"></i> 참가 신청
                     </button>
@@ -120,12 +120,12 @@
                                     <span th:if="${!enroll.accepted}">대기중</span>
                                 </td>
                                 <td th:if="${study.isManager(#authentication.principal)}">
-                                    <a th:if="${event.isAcceptable(enroll)}" href="#" class="text-decoration-none"
+                                    <a th:if="${event.canAccept(enroll)}" href="#" class="text-decoration-none"
                                        th:href="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/accept'}" >신청 수락</a>
                                     <a th:if="${event.isRejectable(enroll)}" href="#" class="text-decoration-none"
                                        th:href="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/reject'}">취소</a>
                                 </td>
-                                <td th:if="${study.isManager(#authentication.principal)}">
+                                <td th:if="${study.canReject(#authentication.principal)}">
                                     <a th:if="${enroll.accepted && !enroll.attended}" href="#" class="text-decoration-none"
                                        th:href="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/enrollments/' + ${enroll.id} + '/checkin'}">체크인</a>
                                     <a th:if="${enroll.accepted && enroll.attended}" href="#" class="text-decoration-none"
@@ -180,36 +180,13 @@
                        th:href="@{'/study/' + ${study.path} + '/events/' + ${event.id} + '/edit'}" >
                         모임 수정
                     </a> <br/>
-                    <button type="button" class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#cancel">
+                    <button class="btn btn-outline-danger btn-sm" data-toggle="modal" data-target="#cancel">
                         모임 취소
-                    </button>
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                        Launch demo modal
                     </button>
                 </dd>
             </dl>
             <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            ...
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Modal -->
-            <div class="modal fade" id="cancel" tabindex="-1" role="dialog" aria-labelledby="cancelTitle" aria-hidden="true">
+            <div class="modal" id="cancel" tabindex="-1" role="dialog" aria-labelledby="cancelTitle" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
