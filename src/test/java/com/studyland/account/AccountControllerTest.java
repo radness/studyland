@@ -1,17 +1,15 @@
 package com.studyland.account;
 
-import com.studyland.account.AccountRepository;
-import com.studyland.domain.Account;
-import com.studyland.mail.EmailMessage;
-import com.studyland.mail.EmailService;
+import com.studyland.infra.mail.EmailMessage;
+import com.studyland.infra.mail.EmailService;
+import com.studyland.modules.account.Account;
+import com.studyland.modules.account.AccountRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 

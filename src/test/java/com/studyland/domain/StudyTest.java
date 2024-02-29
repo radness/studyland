@@ -1,6 +1,8 @@
 package com.studyland.domain;
 
-import com.studyland.account.UserAccount;
+import com.studyland.modules.account.Account;
+import com.studyland.modules.account.UserAccount;
+import com.studyland.modules.study.Study;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

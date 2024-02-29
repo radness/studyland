@@ -1,9 +1,11 @@
 package com.studyland.study;
 
 import com.studyland.WithAccount;
-import com.studyland.account.AccountRepository;
-import com.studyland.domain.Account;
-import com.studyland.domain.Study;
+import com.studyland.modules.account.AccountRepository;
+import com.studyland.modules.account.Account;
+import com.studyland.modules.study.Study;
+import com.studyland.modules.study.StudyRepository;
+import com.studyland.modules.study.StudyService;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;

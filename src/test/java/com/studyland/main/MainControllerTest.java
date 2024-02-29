@@ -1,8 +1,8 @@
 package com.studyland.main;
 
-import com.studyland.account.AccountRepository;
-import com.studyland.account.AccountService;
-import com.studyland.account.SignUpForm;
+import com.studyland.modules.account.AccountRepository;
+import com.studyland.modules.account.AccountService;
+import com.studyland.modules.account.form.SignUpForm;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

@@ -1,10 +1,12 @@
 package com.studyland.event;
 
 import com.studyland.WithAccount;
-import com.studyland.domain.Account;
-import com.studyland.domain.Event;
-import com.studyland.domain.EventType;
-import com.studyland.domain.Study;
+import com.studyland.modules.account.Account;
+import com.studyland.modules.event.EnrollmentRepository;
+import com.studyland.modules.event.Event;
+import com.studyland.modules.event.EventService;
+import com.studyland.modules.event.EventType;
+import com.studyland.modules.study.Study;
 import com.studyland.study.StudyControllerTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,8 +22,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class EventControllerTest extends StudyControllerTest {
 
-    @Autowired EventService eventService;
-    @Autowired EnrollmentRepository enrollmentRepository;
+    @Autowired
+    EventService eventService;
+    @Autowired
+    EnrollmentRepository enrollmentRepository;
 
     @Test
     @DisplayName("선착순 모임에 참가 신청 - 자동 수락")
