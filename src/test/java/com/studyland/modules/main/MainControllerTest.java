@@ -1,4 +1,4 @@
-package com.studyland.main;
+package com.studyland.modules.main;
 
 import com.studyland.modules.account.AccountRepository;
 import com.studyland.modules.account.AccountService;

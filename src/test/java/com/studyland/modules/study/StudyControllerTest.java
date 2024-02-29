@@ -1,11 +1,9 @@
-package com.studyland.study;
+package com.studyland.modules.study;
 
-import com.studyland.WithAccount;
+import com.studyland.infra.MockMvcTest;
+import com.studyland.modules.account.WithAccount;
 import com.studyland.modules.account.AccountRepository;
 import com.studyland.modules.account.Account;
-import com.studyland.modules.study.Study;
-import com.studyland.modules.study.StudyRepository;
-import com.studyland.modules.study.StudyService;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,10 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Transactional
-@SpringBootTest
-@AutoConfigureMockMvc
-@RequiredArgsConstructor
+@MockMvcTest
 public class StudyControllerTest {
 
     @Autowired protected MockMvc mockMvc;

@@ -1,5 +1,6 @@
-package com.studyland;
+package com.studyland.modules.account;
 
+import com.studyland.modules.account.WithAccountSecurityContextFactory;
 import org.springframework.security.test.context.support.WithSecurityContext;
 
 import java.lang.annotation.Retention;

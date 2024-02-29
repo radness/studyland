@@ -1,11 +1,7 @@
-package com.studyland.account;
+package com.studyland.modules.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.studyland.WithAccount;
-import com.studyland.modules.account.AccountRepository;
-import com.studyland.modules.account.AccountService;
-import com.studyland.modules.account.Account;
-import com.studyland.modules.account.SettingController;
+import com.studyland.infra.MockMvcTest;
 import com.studyland.modules.tag.Tag;
 import com.studyland.modules.zone.Zone;
 import com.studyland.modules.account.form.TagForm;
@@ -17,13 +13,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.transaction.annotation.Transactional;
 
 import static com.studyland.modules.account.SettingController.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,9 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Transactional
-@SpringBootTest
-@AutoConfigureMockMvc
+@MockMvcTest
 class SettingControllerTest {
     @Autowired MockMvc mockMvc;
     @Autowired AccountRepository accountRepository;

@@ -1,5 +1,6 @@
-package com.studyland.account;
+package com.studyland.modules.account;
 
+import com.studyland.infra.MockMvcTest;
 import com.studyland.infra.mail.EmailMessage;
 import com.studyland.infra.mail.EmailService;
 import com.studyland.modules.account.Account;
@@ -25,9 +26,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@Transactional
-@SpringBootTest
-@AutoConfigureMockMvc
+@MockMvcTest
 public class AccountControllerTest {
 
     @Autowired

@@ -1,4 +1,4 @@
-package com.studyland.domain;
+package com.studyland.modules.study;
 
 import com.studyland.modules.account.Account;
 import com.studyland.modules.account.UserAccount;

@@ -3,13 +3,12 @@ package com.studyland.modules.account;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.studyland.modules.account.form.*;
-import com.studyland.modules.tag.Tag;
-import com.studyland.modules.zone.Zone;
-import com.studyland.modules.zone.ZoneRepository;
-import com.studyland.settings.form.*;
 import com.studyland.modules.account.validator.NicknameValidator;
 import com.studyland.modules.account.validator.PasswordFormValidator;
+import com.studyland.modules.tag.Tag;
 import com.studyland.modules.tag.TagRepository;
+import com.studyland.modules.zone.Zone;
+import com.studyland.modules.zone.ZoneRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
@@ -33,14 +32,14 @@ import static com.studyland.modules.account.SettingController.SETTINGS;
 @RequiredArgsConstructor
 public class SettingController {
 
-    static final String ROOT = "/";
-    static final String SETTINGS = "settings";
-    static final String PROFILE = "/profile";
-    static final String PASSWORD = "/password";
-    static final String NOTIFICATIONS = "/notifications";
-    static final String ACCOUNT = "/account";
-    static final String TAGS = "/tags";
-    static final String ZONES = "/zones";
+    public static final String ROOT = "/";
+    public static final String SETTINGS = "settings";
+    public static final String PROFILE = "/profile";
+    public static final String PASSWORD = "/password";
+    public static final String NOTIFICATIONS = "/notifications";
+    public static final String ACCOUNT = "/account";
+    public static final String TAGS = "/tags";
+    public static final String ZONES = "/zones";
 
     // @RequiredArgsConstructor 를 선언하여 생성자 주입을 코드없이 자동으로 설정
     private final AccountService accountService;
@@ -232,4 +231,5 @@ public class SettingController {
         accountService.removeTag(account, tag);
         return ResponseEntity.ok().build();
     }
+
 }

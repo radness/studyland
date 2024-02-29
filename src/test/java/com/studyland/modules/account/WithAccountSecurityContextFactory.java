@@ -1,6 +1,5 @@
-package com.studyland;
+package com.studyland.modules.account;
 
-import com.studyland.modules.account.AccountService;
 import com.studyland.modules.account.form.SignUpForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
