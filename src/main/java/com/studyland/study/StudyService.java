@@ -160,4 +160,7 @@ public class StudyService {
         return study;
     }
 
+    public void addMember(Study study, Account account) {
+        study.addMember(account);
+    }
 }

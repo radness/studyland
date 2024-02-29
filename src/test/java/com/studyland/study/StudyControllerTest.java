@@ -24,12 +24,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @RequiredArgsConstructor
-class StudyControllerTest {
+public class StudyControllerTest {
 
-    @Autowired MockMvc mockMvc;
-    @Autowired StudyService studyService;
-    @Autowired StudyRepository studyRepository;
-    @Autowired AccountRepository accountRepository;
+    @Autowired protected MockMvc mockMvc;
+    @Autowired protected StudyService studyService;
+    @Autowired protected StudyRepository studyRepository;
+    @Autowired protected AccountRepository accountRepository;
 
     @AfterEach
     void afterEach() {
@@ -105,4 +105,53 @@ class StudyControllerTest {
                 .andExpect(model().attributeExists("study"));
     }
 
+    @Test
+    @WithAccount("radness")
+    @DisplayName("스터디 가입")
+    void joinStudy() throws Exception {
+        Account newAccount = createAccount("yeonghoon");
+
+        Study study = createStudy("test-study", newAccount);
+
+        mockMvc.perform(get("/study/" + study.getPath() + "/join"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/study/" + study.getPath() + "/members"));
+
+        Account account = accountRepository.findByNickname("radness");
+        assertTrue(study.getManagers().contains(newAccount));
+    }
+
+    @Test
+    @WithAccount("radness")
+    @DisplayName("스터디 탈퇴")
+    void leaveStudy() throws Exception {
+        Account newAccount = createAccount("yeonghoon");
+
+        Study study = createStudy("test-study", newAccount);
+
+        Account account = accountRepository.findByNickname("radness");
+
+        studyService.addMember(study, account);
+
+        mockMvc.perform(get("/study/" + study.getPath() + "/leave"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/study" + study.getPath() + "/members"));
+
+        assertFalse(study.getMembers().contains(account));
+    }
+
+    protected Study createStudy(String path, Account manager) {
+        Study study = new Study();
+        study.setPath(path);
+        studyService.createNewStudy(study, manager);
+        return study;
+    }
+
+    protected Account createAccount(String nickname) {
+        Account account = new Account();
+        account.setNickname(nickname);
+        account.setEmail(nickname + "@email.com");
+        accountRepository.save(account);
+        return account;
+    }
 }
