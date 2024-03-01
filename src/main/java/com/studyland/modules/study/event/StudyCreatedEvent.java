@@ -1,4 +1,4 @@
-package com.studyland.modules.notification.study.event;
+package com.studyland.modules.study.event;
 
 import com.studyland.domain.Study;
 import lombok.Getter;
