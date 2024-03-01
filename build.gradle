@@ -93,6 +93,8 @@ dependencies {
 	implementation "com.querydsl:querydsl-jpa:5.0.0"
 	implementation "com.querydsl:querydsl-apt:5.0.0"
 
+	// 아키텍쳐 테스트 유틸리티(JUnit 5 지원)
+	implementation 'com.tngtech.archunit:archunit-junit5:0.13.1'
 }
 
 test {

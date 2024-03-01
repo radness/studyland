@@ -136,5 +136,9 @@ public class Study {
         // 모임을 생성했던 스터디는 삭제할 수 없다.
         return !this.published;
     }
+
+    public void removeMember(Account account) {
+        this.getMembers().remove(account);
+    }
 }
 

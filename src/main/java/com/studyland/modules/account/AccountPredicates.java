@@ -1,9 +1,8 @@
-package com.studyland.account;
+package com.studyland.modules.account;
 
 import com.querydsl.core.types.Predicate;
-import com.studyland.domain.QAccount;
-import com.studyland.domain.Tag;
-import com.studyland.domain.Zone;
+import com.studyland.modules.tag.Tag;
+import com.studyland.modules.zone.Zone;
 
 import java.util.Set;
 

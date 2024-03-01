@@ -1,16 +1,16 @@
 package com.studyland.modules.study.event;
 
-import com.studyland.account.AccountPredicates;
-import com.studyland.account.AccountRepository;
-import com.studyland.config.AppProperties;
-import com.studyland.domain.Account;
-import com.studyland.domain.Study;
-import com.studyland.mail.EmailMessage;
-import com.studyland.mail.EmailService;
+import com.studyland.infra.config.AppProperties;
+import com.studyland.infra.mail.EmailMessage;
+import com.studyland.infra.mail.EmailService;
+import com.studyland.modules.account.Account;
+import com.studyland.modules.account.AccountPredicates;
+import com.studyland.modules.account.AccountRepository;
 import com.studyland.modules.notification.Notification;
 import com.studyland.modules.notification.NotificationRepository;
 import com.studyland.modules.notification.NotificationType;
-import com.studyland.study.StudyRepository;
+import com.studyland.modules.study.Study;
+import com.studyland.modules.study.StudyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;

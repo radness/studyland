@@ -9,7 +9,6 @@ import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.sli
 
 @AnalyzeClasses(packagesOf = App.class)
 public class PackageDependencyTests {
-
     private static final String STUDY = "..modules.study..";
     private static final String EVENT = "..modules.event..";
     private static final String ACCOUNT = "..modules.account..";

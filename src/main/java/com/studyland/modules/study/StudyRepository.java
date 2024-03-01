@@ -1,6 +1,5 @@
-package com.studyland.study;
+package com.studyland.modules.study;
 
-import com.studyland.domain.Study;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,4 +22,6 @@ public interface StudyRepository extends JpaRepository<Study, Long> {
 
     @EntityGraph(value = "Study.withTagsAndZones", type = EntityGraph.EntityGraphType.FETCH)
     Study findStudyWithTagsAndZonesById(Long id);
+
+    Study findStudyOnlyByPath(String path);
 }
