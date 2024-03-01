@@ -29,10 +29,7 @@ public class StudyService {
     public Study getStudyToUpdate(Account account, String path) {
         Study study = this.getStudy(path);
         // 권한이 있는 사용자인지 체크하고 가져온다.
-        if (!account.isManagerOf(study)) {
-            throw new org.springframework.security.access.AccessDeniedException("해당 기능을 사용할 수 없습니다.");
-        }
-//        checkIfManager(account, study);
+        checkIfManager(account, study);
         return study;
     }
 

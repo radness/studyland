@@ -68,7 +68,7 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'com.h2database:h2'
+//	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -88,11 +88,14 @@ dependencies {
 
 	testImplementation 'com.tngtech.archunit:archunit-junit5:0.13.1'
 
+	/* testcontainers */
+	testImplementation 'org.testcontainers:junit-jupiter:1.19.6'
+	testImplementation 'org.testcontainers:postgresql:1.17.6'
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
-}
+//tasks.named('test') {
+//	useJUnitPlatform()
+//}
 
 bootRun {
 	String activeProfile = System.properties['spring.profiles.active']

@@ -1,6 +1,6 @@
 package com.studyland.modules.notification.study.event;
 
-import com.studyland.domain.Study;
+import com.studyland.modules.study.Study;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;

@@ -61,6 +61,7 @@ public class Account {
     private boolean studyUpdatedByEmail;
 
     private boolean studyUpdatedByWeb = true;
+
     private LocalDateTime emailCheckTokenGeneratedAt;
 
     // 비어있는 Collection 을 setting 해주는것이 좋다.

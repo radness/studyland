@@ -1,5 +1,6 @@
 package com.studyland.modules.main;
 
+import com.studyland.infra.AbstractContainerBaseTest;
 import com.studyland.modules.account.AccountRepository;
 import com.studyland.modules.account.AccountService;
 import com.studyland.modules.account.form.SignUpForm;
@@ -21,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class MainControllerTest {
+public class MainControllerTest extends AbstractContainerBaseTest {
 
     @Autowired MockMvc mockMvc;
     @Autowired AccountService accountService;

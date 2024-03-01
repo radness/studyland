@@ -1,5 +1,6 @@
 package com.studyland.modules.study;
 
+import com.studyland.infra.AbstractContainerBaseTest;
 import com.studyland.infra.MockMvcTest;
 import com.studyland.modules.account.WithAccount;
 import com.studyland.modules.account.AccountRepository;
@@ -21,7 +22,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @MockMvcTest
-public class StudyControllerTest {
+public class StudyControllerTest extends AbstractContainerBaseTest {
 
     @Autowired protected MockMvc mockMvc;
     @Autowired protected StudyService studyService;

@@ -1,6 +1,7 @@
 package com.studyland.modules.account;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.studyland.infra.AbstractContainerBaseTest;
 import com.studyland.infra.MockMvcTest;
 import com.studyland.modules.tag.Tag;
 import com.studyland.modules.zone.Zone;
@@ -26,7 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @MockMvcTest
-class SettingControllerTest {
+class SettingControllerTest extends AbstractContainerBaseTest {
     @Autowired MockMvc mockMvc;
     @Autowired AccountRepository accountRepository;
     @Autowired PasswordEncoder passwordEncoder;
