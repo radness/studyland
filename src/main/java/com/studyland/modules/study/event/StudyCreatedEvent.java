@@ -1,6 +1,6 @@
 package com.studyland.modules.study.event;
 
-import com.studyland.domain.Study;
+import com.studyland.modules.study.Study;
 import lombok.Getter;
 
 @Getter

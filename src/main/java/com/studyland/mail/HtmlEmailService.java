@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -29,7 +30,7 @@ public class HtmlEmailService implements EmailService {
             mimeMessageHelper.setText(emailMessage.getMessage(), false);
             javaMailSender.send(mimeMessage);
             // 보냈다고 표시
-            log.info("sent email: {}" + emailMessage.getMessage());
+            log.info("sent email: {}", emailMessage.getMessage());
         } catch (MessagingException e) {
             log.error("failed to send email.", e);
             throw new RuntimeException(e); // 에러 던지기
