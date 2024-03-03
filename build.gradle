@@ -3,23 +3,25 @@ plugins {
 	id 'org.springframework.boot' version '2.7.18'
 	id 'io.spring.dependency-management' version '1.1.4'
 	id "com.github.node-gradle.node" version "3.1.1"
+	//querydsl 추가
+	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
-node {
-	version = '12.22.12'
-	download = true
-	nodeModulesDir = file("${projectDir}/src/main/resources/static")
-
-}
+//node {
+//	version = '12.22.12'
+//	download = true
+//	nodeModulesDir = file("${projectDir}/src/main/resources/static")
+//
+//}
 tasks.register('copyFrontLib', Copy) {
 	from "${projectDir}/src/main/resources/static"
 	into "${projectDir}/build/resources/main/static/."
 }
-copyFrontLib.dependsOn npmInstall
+
 compileJava.dependsOn copyFrontLib
 
 compileJava.options.encoding = 'UTF-8'
-tasks.withType(JavaCompile).configureEach {
+tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
 }
 
@@ -68,7 +70,7 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-//	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -86,18 +88,36 @@ dependencies {
 	// modelMapper
 	implementation 'org.modelmapper:modelmapper:2.3.6'
 
-	testImplementation 'com.tngtech.archunit:archunit-junit5:0.13.1'
+	// queryDSL 의존성 추가
+	// 복잡한 쿼리를 spring data jpa 에서 자바 코드를 사용해서 구현할 수 있게 도와주는 유틸리티성 라이브러리
+	implementation "com.querydsl:querydsl-jpa:5.0.0"
+	implementation "com.querydsl:querydsl-apt:5.0.0"
 
-	/* testcontainers */
-	testImplementation 'org.testcontainers:junit-jupiter:1.19.6'
-	testImplementation 'org.testcontainers:postgresql:1.17.6'
+	// 아키텍쳐 테스트 유틸리티(JUnit 5 지원)
+	implementation 'com.tngtech.archunit:archunit-junit5:0.13.1'
 }
 
-//tasks.named('test') {
-//	useJUnitPlatform()
-//}
-
-bootRun {
-	String activeProfile = System.properties['spring.profiles.active']
-	systemProperty "spring.profiles.active", activeProfile
+test {
+	useJUnitPlatform()
 }
+
+//querydsl 추가 시작
+def querydslDir = "$buildDir/generated/querydsl"
+
+querydsl {
+	jpa = true
+	querydslSourcesDir = querydslDir
+}
+sourceSets {
+	main.java.srcDir querydslDir
+}
+compileQuerydsl{
+	options.annotationProcessorPath = configurations.querydsl
+}
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+	querydsl.extendsFrom compileClasspath
+}
+//querydsl 추가 끝

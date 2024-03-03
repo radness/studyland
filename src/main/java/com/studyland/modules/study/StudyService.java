@@ -1,16 +1,18 @@
 package com.studyland.modules.study;
 
 import com.studyland.modules.account.Account;
+import com.studyland.modules.study.event.StudyCreatedEvent;
 import com.studyland.modules.study.form.StudyDescriptionForm;
-import com.studyland.modules.study.form.StudyForm;
 import com.studyland.modules.tag.Tag;
 import com.studyland.modules.zone.Zone;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import org.springframework.security.access.AccessDeniedException;
+import static com.studyland.modules.study.form.StudyForm.VALID_PATH_PATTERN;
 
 @Service
 @Transactional
@@ -19,17 +21,22 @@ public class StudyService {
 
     private final StudyRepository studyRepository;
     private final ModelMapper modelMapper;
+    private final ApplicationEventPublisher eventPublisher;
 
     public Study createNewStudy(Study study, Account account) {
         Study newStudy = studyRepository.save(study);
         newStudy.addManager(account);
+        eventPublisher.publishEvent(new StudyCreatedEvent(newStudy));
         return newStudy;
     }
 
     public Study getStudyToUpdate(Account account, String path) {
         Study study = this.getStudy(path);
         // 권한이 있는 사용자인지 체크하고 가져온다.
-        checkIfManager(account, study);
+        if (!account.isManagerOf(study)) {
+            throw new org.springframework.security.access.AccessDeniedException("해당 기능을 사용할 수 없습니다.");
+        }
+//        checkIfManager(account, study);
         return study;
     }
 
@@ -122,9 +129,10 @@ public class StudyService {
     }
 
     public boolean isValidPath(String newPath) {
-        if (!newPath.matches(StudyForm.VALID_PATH_PATTERN)) {
+        if (!newPath.matches(VALID_PATH_PATTERN)) {
             return false;
         }
+
         return !studyRepository.existsByPath(newPath);
     }
 
@@ -133,7 +141,6 @@ public class StudyService {
     }
 
     public boolean isValidTitle(String newTitle) {
-        // 길이 체크만 하고 중복 체크는 하지 않는다.
         return newTitle.length() <= 50;
     }
 
@@ -149,13 +156,17 @@ public class StudyService {
         }
     }
 
+    public void addMember(Study study, Account account) {
+        study.addMember(account);
+    }
+
+    public void removeMember(Study study, Account account) {
+        study.removeMember(account);
+    }
+
     public Study getStudyToEnroll(String path) {
         Study study = studyRepository.findStudyOnlyByPath(path);
         checkIfExistingStudy(path, study);
         return study;
-    }
-
-    public void addMember(Study study, Account account) {
-        study.addMember(account);
     }
 }

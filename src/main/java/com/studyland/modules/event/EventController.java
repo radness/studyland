@@ -1,10 +1,10 @@
 package com.studyland.modules.event;
 
-import com.studyland.modules.account.CurrentUser;
 import com.studyland.modules.account.Account;
-import com.studyland.modules.study.Study;
+import com.studyland.modules.account.CurrentUser;
 import com.studyland.modules.event.form.EventForm;
 import com.studyland.modules.event.validator.EventValidator;
+import com.studyland.modules.study.Study;
 import com.studyland.modules.study.StudyRepository;
 import com.studyland.modules.study.StudyService;
 import lombok.RequiredArgsConstructor;

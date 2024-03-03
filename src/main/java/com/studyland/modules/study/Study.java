@@ -27,6 +27,9 @@ import java.util.Set;
         @NamedAttributeNode("managers")})
 @NamedEntityGraph(name = "Study.withManagers", attributeNodes = {
         @NamedAttributeNode("managers")})
+@NamedEntityGraph(name = "Study.withTagsAndZones", attributeNodes = {
+        @NamedAttributeNode("tags"),
+        @NamedAttributeNode("zones")})
 @Entity
 @Getter
 @Setter @EqualsAndHashCode(of = "id")
@@ -132,6 +135,10 @@ public class Study {
     public boolean isRemovable() {
         // 모임을 생성했던 스터디는 삭제할 수 없다.
         return !this.published;
+    }
+
+    public void removeMember(Account account) {
+        this.getMembers().remove(account);
     }
 }
 
