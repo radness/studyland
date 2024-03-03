@@ -1,7 +1,6 @@
 package com.studyland.modules.zone;
 
 import lombok.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 
